@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        //https://docs.google.com/spreadsheets/d/e/2PACX-1vTrygq2cuZTHR4Ly_P2TOWLJw4Kv_D9Gya37xFtSHrwnRAUl823ulYAOkga_b-1uXqhUfwgLCTIA0FG/pubhtml
+        //https://spreadsheets.google.com/feeds/list/10FSiBTq7zVAPxGLKV9hoVvfAeOz1m02BDr7X-SnZgXM/1/public/basic?alt=json
+
+        function getData() {
+            let sheetNumber = document.getElementById('sheetInput').value;
+            let rowNumber = document.getElementById('rowInput').value - 1;
+            axios.get(`https://spreadsheets.google.com/feeds/list/10FSiBTq7zVAPxGLKV9hoVvfAeOz1m02BDr7X-SnZgXM/${sheetNumber}/public/basic?alt=json`)
+                .then(function (response) {
+                    document.getElementById("output").innerHTML += response.data.feed.entry[rowNumber].title.$t + ": " + JSON.stringify(response.data.feed.entry[rowNumber].content.$t) + '<br>';
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+            //   .then(function () {
+            //     // always executed
+            //   });
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <p>This is how you can get values from a google sheet without needing a google API key. In order to do this you
+        have to have google sheet that is published to the web like this one <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vTrygq2cuZTHR4Ly_P2TOWLJw4Kv_D9Gya37xFtSHrwnRAUl823ulYAOkga_b-1uXqhUfwgLCTIA0FG/pubhtml'>LINK</a></p>
+
+    <p>Here are some more detailed instructions on this <a href="https://developer.umajin.com/2017/08/23/google-spreadsheet-as-a-json-data-source/">LINK</a></p>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTrygq2cuZTHR4Ly_P2TOWLJw4Kv_D9Gya37xFtSHrwnRAUl823ulYAOkga_b-1uXqhUfwgLCTIA0FG/pubhtml?widget=true&amp;headers=false"
+        width="550px" height="375px"></iframe><br><br>
+
+    Get From Sheet: <input id="sheetInput" type="number" value="1" min="1" max="2"><br>
+    And From Row: <input id="rowInput" type="number" value="1" min="0" max="100"><br>
+    <button type="Submit" onclick="getData()">Submit</button><br>
+    <br>
+    <div id="output"></div>
+</body>
+
+</html>
